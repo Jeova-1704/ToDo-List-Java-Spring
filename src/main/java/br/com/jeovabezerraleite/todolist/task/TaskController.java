@@ -1,12 +1,12 @@
 package br.com.jeovabezerraleite.todolist.task;
 
+import br.com.jeovabezerraleite.todolist.utils.Utils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.attribute.UserPrincipalLookupService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -43,11 +43,21 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public TaskModel updateTask(@RequestBody TaskModel taskModel, @PathVariable UUID id,  HttpServletRequest servletRequest) {
-        var idUser = servletRequest.getAttribute("idUser");
-        taskModel.setIdUser((UUID) idUser);
-        taskModel.setId(id);
-        return this.taskRepository.save(taskModel);
-    }
+    public ResponseEntity updateTask(@RequestBody TaskModel taskModel, @PathVariable UUID id,  HttpServletRequest servletRequest) {
+        var task = this.taskRepository.findById(id).orElse(null);
 
+        if(task == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tarefa não encontrada.");
+        }
+
+        var idUser = servletRequest.getAttribute("idUser");
+
+        if (!task.getIdUser().equals(idUser)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuario não tem permisão para alterar está tarefa.");
+        }
+
+        Utils.copyNonNullPropeties(taskModel, task);
+        var taskUpdated = this.taskRepository.save(task);
+        return ResponseEntity.ok().body(taskUpdated);
+    }
 }
