@@ -1,7 +1,7 @@
 package br.com.jeovabezerraleite.todolist.filter;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import br.com.jeovabezerraleite.todolist.user.IUserRepository;
+import br.com.jeovabezerraleite.todolist.repositories.IUserRepository;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

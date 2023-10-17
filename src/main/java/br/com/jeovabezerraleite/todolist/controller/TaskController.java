@@ -1,5 +1,7 @@
-package br.com.jeovabezerraleite.todolist.task;
+package br.com.jeovabezerraleite.todolist.controller;
 
+import br.com.jeovabezerraleite.todolist.repositories.ITaskRepository;
+import br.com.jeovabezerraleite.todolist.domain.tasks.TaskModel;
 import br.com.jeovabezerraleite.todolist.utils.Utils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +60,8 @@ public class TaskController {
 
         Utils.copyNonNullPropeties(taskModel, task);
         var taskUpdated = this.taskRepository.save(task);
-        return ResponseEntity.ok().body(taskUpdated);
+        return ReponseEntity.ok().body(taskUpdated);
     }
+
+
 }

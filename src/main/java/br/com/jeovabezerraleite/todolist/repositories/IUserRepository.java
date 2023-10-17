@@ -1,5 +1,6 @@
-package br.com.jeovabezerraleite.todolist.user;
+package br.com.jeovabezerraleite.todolist.repositories;
 
+import br.com.jeovabezerraleite.todolist.domain.user.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package br.com.jeovabezerraleite.todolist.errors;
+package br.com.jeovabezerraleite.todolist.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

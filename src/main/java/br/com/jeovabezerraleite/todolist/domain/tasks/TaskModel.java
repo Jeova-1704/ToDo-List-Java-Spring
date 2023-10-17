@@ -1,4 +1,4 @@
-package br.com.jeovabezerraleite.todolist.task;
+package br.com.jeovabezerraleite.todolist.domain.tasks;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

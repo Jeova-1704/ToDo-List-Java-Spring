@@ -1,4 +1,4 @@
-package br.com.jeovabezerraleite.todolist.user;
+package br.com.jeovabezerraleite.todolist.domain.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,7 +1,9 @@
-package br.com.jeovabezerraleite.todolist.user;
+package br.com.jeovabezerraleite.todolist.controller;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
+import br.com.jeovabezerraleite.todolist.repositories.IUserRepository;
+import br.com.jeovabezerraleite.todolist.domain.user.UserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
