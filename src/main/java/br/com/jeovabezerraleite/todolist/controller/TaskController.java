@@ -60,8 +60,16 @@ public class TaskController {
 
         Utils.copyNonNullPropeties(taskModel, task);
         var taskUpdated = this.taskRepository.save(task);
-        return ReponseEntity.ok().body(taskUpdated);
+        return ResponseEntity.ok().body(taskUpdated);
     }
 
-
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity deleteTaskId(@PathVariable UUID id) {
+        if (taskRepository.existsById(id)) {
+            taskRepository.deleteById(id);
+            return ResponseEntity.ok().body("Tarefa deletada com sucesso");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
