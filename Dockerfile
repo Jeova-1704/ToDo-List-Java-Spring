@@ -7,6 +7,10 @@ FROM openjdk:17-jdk-slim
 
 COPY . .
 
+RUN apt-get install software-properties-common
+RUN apt-add-repository universe
+RUN apt-get update
+
 RUN apt-get install maven
 RUN mvn clean install
 
