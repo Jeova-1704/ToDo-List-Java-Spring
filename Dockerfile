@@ -1,21 +1,21 @@
-FROM ubuntu:latest AS build
+FROM maven:3.8.5-openjdk-17 AS builder
 
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
+WORKDIR /app
 
-FROM openjdk:17-jdk-slim
+COPY pom.xml .
+
+RUN mvn dependency:go-offline
 
 COPY . .
 
-RUN apt-get install software-properties-common
-RUN apt-add-repository universe
-RUN apt-get update
+RUN mvn package -DskipTests
 
-RUN apt-get install maven
-RUN mvn clean install
+FROM openjdk:21-ea-17-slim-buster
+
+WORKDIR /app
+
+COPY --from=builder /app/target/*.jar app.jar
 
 EXPOSE 8080
 
-COPY --from=build /target/todolist-1.0.0.jar app.jar
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar"]
