@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.config.Task;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -64,7 +65,13 @@ public class TaskController {
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity deleteTaskId(@PathVariable UUID id) {
+    public ResponseEntity deleteTaskId(@PathVariable UUID id, HttpServletRequest servletRequest) {
+        var task = this.taskRepository.findById(id).orElse(null);
+        var idUser = servletRequest.getAttribute("idUser");
+
+        if(task != null && !task.getIdUser().equals(idUser)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuario não tem permisão para alterar está tarefa.");
+        }
         if (taskRepository.existsById(id)) {
             taskRepository.deleteById(id);
             return ResponseEntity.ok().body("Tarefa deletada com sucesso");
