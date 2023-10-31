@@ -17,12 +17,14 @@ import java.util.UUID;
 @RequestMapping("/tasks")
 public class TaskController {
 
+    private static final String IDUSER = "idUser";
+
     @Autowired
     private ITaskRepository taskRepository;
 
     @PostMapping("/")
     public ResponseEntity create(@RequestBody TaskModel taskModel, HttpServletRequest request) {
-        taskModel.setIdUser((UUID) request.getAttribute("idUser"));
+        taskModel.setIdUser((UUID) request.getAttribute(IDUSER));
 
         var currenteDate = LocalDateTime.now();
         if(currenteDate.isAfter(taskModel.getStartAt()) || currenteDate.isAfter(taskModel.getEndAt())) {
@@ -40,7 +42,7 @@ public class TaskController {
 
     @GetMapping("/")
     public List<TaskModel> listAllTasks(HttpServletRequest servletRequest) {
-        return this.taskRepository.findByIdUser((UUID)servletRequest.getAttribute("idUser"));
+        return this.taskRepository.findByIdUser((UUID)servletRequest.getAttribute(IDUSER));
 
     }
 
@@ -52,7 +54,7 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tarefa não encontrada.");
         }
 
-        var idUser = servletRequest.getAttribute("idUser");
+        var idUser = servletRequest.getAttribute(IDUSER);
 
         if (!task.getIdUser().equals(idUser)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuario não tem permisão para alterar está tarefa.");
@@ -66,7 +68,7 @@ public class TaskController {
     @DeleteMapping("delete/{id}")
     public ResponseEntity deleteTaskId(@PathVariable UUID id, HttpServletRequest servletRequest) {
         var task = this.taskRepository.findById(id).orElse(null);
-        var idUser = servletRequest.getAttribute("idUser");
+        var idUser = servletRequest.getAttribute(IDUSER);
 
         if(task != null && !task.getIdUser().equals(idUser)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Usuario não tem permisão para alterar está tarefa.");
